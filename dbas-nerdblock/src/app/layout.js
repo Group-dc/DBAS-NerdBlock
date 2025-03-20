@@ -23,10 +23,10 @@ export default function RootLayout({ children }) {
 
               <ul>
                 <li><Link href="/">Dashboard</Link></li>
-                <li><Link href="/orders">Orders</Link></li>
-                <li><Link href="/inventory">Inventory</Link></li>
-                <li><Link href="/customers">Customers</Link></li>
-                <li><Link href="/subscriptions">Subscriptions</Link></li>
+                <li><Link href="/pages/orders">Orders</Link></li>
+                <li><Link href="/pages/inventory">Inventory</Link></li>
+                <li><Link href="/pages/customers">Customers</Link></li>
+                <li><Link href="/pages/subscriptions">Subscriptions</Link></li>
               </ul>
             </nav>
           </aside>
