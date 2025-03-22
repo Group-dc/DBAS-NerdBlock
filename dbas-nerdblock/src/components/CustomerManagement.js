@@ -16,7 +16,7 @@ export default function CustomerManagement() {
 
   return (
     <div className="customer-container">
-      <h1>Customer Management</h1>
+      <h1 className='header'>Customer Management</h1>
       <table>
         <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Country</th></tr></thead>
         <tbody>
