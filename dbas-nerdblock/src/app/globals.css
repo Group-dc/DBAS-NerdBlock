@@ -20,7 +20,21 @@ body {
 
 .layout {
   display: flex;
-  height: 100vh;
+  height: 100vw;
+}
+
+.main-title {
+  color: #565b5c;
+  margin-bottom: 10px;
+  font-size: 2.7em;
+  font-weight: 600;
+}
+
+.header {
+  color: #565b5c;
+  padding: 10px;
+  margin: 20px;
+  border-bottom: 1px solid #1ca5c8;
 }
 
 .sidebar {
@@ -91,7 +105,7 @@ body {
   display: flex;
   flex-direction: column;
   padding: 15px;
-  margin: 0;
+  margin: 1em 0 4em 0;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   text-decoration: none;

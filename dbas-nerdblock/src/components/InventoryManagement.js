@@ -16,7 +16,7 @@ export default function InventoryManagement() {
 
   return (
     <div className="inventory-container">
-      <h1>Inventory Management</h1>
+      <h1 className='header'>Inventory Management</h1>
       <table>
         <thead><tr><th>Product</th><th>Quantity</th><th>Location</th></tr></thead>
         <tbody>

@@ -5,7 +5,7 @@ import OrderManagement from '@/components/OrderManagement';
 export default function OrdersPage() {
   return (
     <div className="page-container">
-      <h1>Orders</h1>
+      {/* <h1>Orders</h1> */}
       <OrderManagement />
     </div>
   );

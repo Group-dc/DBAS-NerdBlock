@@ -93,6 +93,7 @@ export default function CustomerManagement() {
         </div>
       )}
   
+      <h1 className='header'>Customer Management</h1>
       <table>
         <thead>
           <tr>

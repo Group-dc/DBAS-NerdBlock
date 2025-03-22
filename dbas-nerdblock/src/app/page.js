@@ -6,7 +6,7 @@ import Dashboard from '@/components/Dashboard';
 export default function MainPage() {
   return (
     <div className="main-container">
-      <h1>NerdBlock Management System</h1>
+      <h1 className='main-title'>NerdBlock Management System</h1>
       <Dashboard />
     </div>
   );
