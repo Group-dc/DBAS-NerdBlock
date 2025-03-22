@@ -17,8 +17,11 @@ export default function CustomerManagement() {
   return (
     <div className="customer-container">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       <h1 className='header'>Customer Management</h1>
 =======
+=======
+>>>>>>> Stashed changes
       <div className="header-div">
         <h1 className='header'>Customer Management</h1>
         <button className="primary-btn" onClick={() => { setShowForm(true); setIsEditing(false); }}>
@@ -54,6 +57,9 @@ export default function CustomerManagement() {
         </div>
       )}
   
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
       <table>
         <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Country</th></tr></thead>
