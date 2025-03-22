@@ -23,6 +23,14 @@ body {
   height: 100vw;
 }
 
+.header-div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #1ca5c8;
+  margin: 20px;
+}
+
 .main-title {
   color: #565b5c;
   margin-bottom: 10px;
@@ -33,8 +41,6 @@ body {
 .header {
   color: #565b5c;
   padding: 10px;
-  margin: 20px;
-  border-bottom: 1px solid #1ca5c8;
 }
 
 /* Sidebar */

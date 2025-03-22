@@ -16,7 +16,9 @@ export default function SubscriptionManagement() {
 
   return (
     <div className="subscription-container">
-      <h1 className='header'>Subscription Management</h1>
+      <div className="header-div">
+        <h1 className='header'>Subscription Management</h1>
+      </div>
       <table>
         <thead><tr><th>ID</th><th>Customer</th><th>Genre</th><th>Start Date</th><th>End Date</th><th>Status</th></tr></thead>
         <tbody>

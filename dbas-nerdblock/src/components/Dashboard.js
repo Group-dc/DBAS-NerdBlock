@@ -34,7 +34,9 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container">
-      <h1 className='header'>Dashboard</h1>
+      <div className="header-div">
+        <h1 className='header'>Dashboard</h1>
+      </div>
       <div className="card-grid">
         <div className="card-box">
           <p className='card-title'>Total Sales</p>
@@ -59,7 +61,9 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <h2 className='header'>Recent Customers</h2>
+      <div className="header-div">
+        <h2 className='header'>Recent Customers</h2>
+      </div>
       <table>
         <thead><tr><th>Name</th><th>Country</th></tr></thead>
         <tbody>

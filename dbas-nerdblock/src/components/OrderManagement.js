@@ -16,7 +16,9 @@ export default function OrderManagement() {
 
   return (
     <div className="order-container">
-      <h1 className='header'>Order Management</h1>
+      <div className="header-div">
+        <h1 className='header'>Order Management</h1>
+      </div>
       <table>
         <thead><tr><th>Order Number</th><th>Customer</th><th>Shipping Date</th><th>Status</th></tr></thead>
         <tbody>
