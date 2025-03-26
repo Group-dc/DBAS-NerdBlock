@@ -175,6 +175,7 @@ th, td {
   padding: 12px;
   border-bottom: 1px solid #ddd;
   text-align: left;
+  vertical-align: middle;
 }
 
 th {
@@ -198,67 +199,59 @@ table tr:nth-child(even) {
   background-color: rgba(28, 165, 200, 0.15);
 }
 
+th:last-child,
+td:last-child {
+  width: 200px;
+  padding-left: 0;
+}
+
+/* =============================== */
+/*      Buttons      */
+/* =============================== */
+
 /* =============================== */
 /*             Buttons             */
 /* =============================== */
 
 button {
-  background: none;
-  border: 1.5px solid #1ca5c8;
-  color: #1ca5c8;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #565b5c;         
+  color: #ffffff;                    
+  border: none;
   padding: 8px 14px;
   border-radius: 5px;
-  cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  transition: background 0.2s, color 0.2s;
+  cursor: pointer;
+  text-transform: uppercase;
+  min-width: 89px;
+  justify-content: center;
+  transition: background 0.2s, transform 0.1s ease;
 }
 
 button:hover {
-  background: rgba(28, 165, 200, 0.1);
+  background-color: #3e4243;         
+  transform: scale(1.02);
 }
 
-/* Edit Button */
-.edit-btn {
-  border-color: #4CAF50;
-  color: #4CAF50;
-}
-
-.edit-btn:hover {
-  background: rgba(76, 175, 80, 0.1);
-}
-
-/* Delete Button */
-.delete-btn {
-  border-color: #E53935;
-  color: #E53935;
-}
-
-.delete-btn:hover {
-  background: rgba(229, 57, 53, 0.1);
-}
-
-/* Save Button */
-.save-btn {
-  border-color: #FF9800;
-  color: #FF9800;
-}
-
-.save-btn:hover {
-  background: rgba(255, 152, 0, 0.1);
-}
-
-/* Cancel Button */
+.edit-btn,
+.delete-btn,
+.save-btn,
 .cancel-btn {
-  border-color: #9E9E9E;
-  color: #9E9E9E;
+  background-color: #565b5c;
+  color: #ffffff;
+  text-transform: uppercase;
 }
 
+.edit-btn:hover,
+.delete-btn:hover,
+.save-btn:hover,
 .cancel-btn:hover {
-  background: rgba(158, 158, 158, 0.1);
+  background-color: #3e4243;
 }
 
-/* Button Group for Actions */
 .button-group {
   display: flex;
   gap: 6px;

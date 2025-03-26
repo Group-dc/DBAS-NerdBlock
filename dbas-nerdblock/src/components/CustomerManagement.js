@@ -1,5 +1,14 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas, faLock, faKey, faCircleXmark, faBagShopping } from '@fortawesome/free-solid-svg-icons';
+import { far, faUser, faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
+// Add the icons to the library
+library.add(fas, faKey, faLock, far, faBagShopping, faUser, faEnvelope, faCircleXmark, fab);
 
 export default function CustomerManagement() {
   const [customers, setCustomers] = useState([]);
@@ -60,10 +69,15 @@ export default function CustomerManagement() {
 
   return (
     <div className={`customer-container ${showForm ? 'modal-active' : ''}`}>
-      <h1>Customer Management</h1>
-      <button className="primary-btn" onClick={() => { setShowForm(true); setIsEditing(false); }}>
-        Add Customer
+      <div className="header-div"> 
+        <h1 className='header'>Customer Management</h1>
+        <button className="primary-btn" onClick={() => { setShowForm(true); setIsEditing(false); }}
+          >
+            <FontAwesomeIcon icon="fa-solid fa-user-plus" size="xl" style={{color: "#ffffff",}} />
+            Add Customer
       </button>
+      </div>
+
   
       {showForm && (
         <>
@@ -121,8 +135,17 @@ export default function CustomerManagement() {
                 <td>{customer.customer_email}</td>
                 <td>{customer.customer_country}</td>
                 <td className="button-group">
-                  <button className="edit-btn" onClick={() => handleEdit(customer)}>Edit</button>
-                  <button className="delete-btn" onClick={() => handleDelete(customer.customer_id)}>Delete</button>
+                  <button className="edit-btn" onClick={() => handleEdit(customer)}
+                    >
+                      <FontAwesomeIcon icon="fa-solid fa-pen-to-square" style={{color: "#ffffff",}} />
+                      Edit
+
+                    </button>
+                  <button className="delete-btn" onClick={() => handleDelete(customer.customer_id)}
+                    >
+                      <FontAwesomeIcon icon="fa-solid fa-trash-can" style={{color: "#ffffff",}} />
+                      Delete
+                    </button>
                 </td>
               </tr>
             ))
