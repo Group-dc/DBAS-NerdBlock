@@ -167,7 +167,8 @@ table {
   background: white;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0px 4px 10px rgba(0, 0, 3, 0.2);
+  color: #565b5c;
 }
 
 th, td {
@@ -177,15 +178,24 @@ th, td {
 }
 
 th {
-  background: #e3f2f8;
+  background: #565b5c;
   text-transform: uppercase;
   font-size: 14px;
   font-weight: 600;
-  color: #565b5c;
+  color: #fff;
 }
 
 tr:hover {
   background: #f1f1f1;
+}
+
+/* Alternate row colors for the table */
+table tr:nth-child(odd) {
+  background-color: white;
+}
+
+table tr:nth-child(even) {
+  background-color: rgba(28, 165, 200, 0.15);
 }
 
 /* =============================== */
