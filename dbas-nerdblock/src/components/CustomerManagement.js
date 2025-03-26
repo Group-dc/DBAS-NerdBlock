@@ -1,5 +1,14 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas, faLock, faKey, faCircleXmark, faBagShopping } from '@fortawesome/free-solid-svg-icons';
+import { far, faUser, faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
+// Add the icons to the library
+library.add(fas, faKey, faLock, far, faBagShopping, faUser, faEnvelope, faCircleXmark, fab);
 
 export default function CustomerManagement() {
   const [customers, setCustomers] = useState([]);
@@ -59,41 +68,52 @@ export default function CustomerManagement() {
   }
 
   return (
-    <div className="customer-container">
-      
-      <div className="header-div">
+    <div className={`customer-container ${showForm ? 'modal-active' : ''}`}>
+      <div className="header-div"> 
         <h1 className='header'>Customer Management</h1>
-        <button className="primary-btn" onClick={() => { setShowForm(true); setIsEditing(false); }}>
-          Add Customer
-        </button>
+        <button className="primary-btn" onClick={() => { setShowForm(true); setIsEditing(false); }}
+          >
+            <FontAwesomeIcon icon="fa-solid fa-user-plus" size="xl" style={{color: "#ffffff",}} />
+            Add Customer
+      </button>
       </div>
+
   
       {showForm && (
-        <div className="modal">
-          <form className="customer-form" onSubmit={handleSubmit}>
-            <h2>{isEditing ? 'Edit Customer' : 'Add Customer'}</h2>
-            <div className="form-group">
-              <label>First Name</label>
-              <input type="text" value={formData.customer_first_name} onChange={(e) => setFormData({ ...formData, customer_first_name: e.target.value })} required />
-            </div>
-            <div className="form-group">
-              <label>Last Name</label>
-              <input type="text" value={formData.customer_last_name} onChange={(e) => setFormData({ ...formData, customer_last_name: e.target.value })} required />
-            </div>
-            <div className="form-group">
-              <label>Email</label>
-              <input type="email" value={formData.customer_email} onChange={(e) => setFormData({ ...formData, customer_email: e.target.value })} required />
-            </div>
-            <div className="form-group">
-              <label>Country</label>
-              <input type="text" value={formData.customer_country} onChange={(e) => setFormData({ ...formData, customer_country: e.target.value })} required />
-            </div>
-            <div className="modal-buttons">
-              <button className="save-btn" type="submit">{isEditing ? 'Update' : 'Create'}</button>
-              <button className="cancel-btn" type="button" onClick={() => setShowForm(false)}>Cancel</button>
-            </div>
-          </form>
-        </div>
+        <>
+          <div className="modal-overlay" onClick={() => setShowForm(false)}></div> 
+          <div className="modal">
+            <form 
+              className="customer-form" 
+              onSubmit={(e) => {
+                handleSubmit(e);
+                setShowForm(false); 
+              }}
+            >
+              <h2>{isEditing ? 'Edit Customer' : 'Add Customer'}</h2>
+              <div className="form-group">
+                <label>First Name</label>
+                <input type="text" value={formData.customer_first_name} onChange={(e) => setFormData({ ...formData, customer_first_name: e.target.value })} required />
+              </div>
+              <div className="form-group">
+                <label>Last Name</label>
+                <input type="text" value={formData.customer_last_name} onChange={(e) => setFormData({ ...formData, customer_last_name: e.target.value })} required />
+              </div>
+              <div className="form-group">
+                <label>Email</label>
+                <input type="email" value={formData.customer_email} onChange={(e) => setFormData({ ...formData, customer_email: e.target.value })} required />
+              </div>
+              <div className="form-group">
+                <label>Country</label>
+                <input type="text" value={formData.customer_country} onChange={(e) => setFormData({ ...formData, customer_country: e.target.value })} required />
+              </div>
+              <div className="modal-buttons">
+                <button className="save-btn" type="submit">{isEditing ? 'Update' : 'Create'}</button>
+                <button className="cancel-btn" type="button" onClick={() => setShowForm(false)}>Cancel</button>
+              </div>
+            </form>
+          </div>
+        </>
       )}
   
       <table>
@@ -115,8 +135,17 @@ export default function CustomerManagement() {
                 <td>{customer.customer_email}</td>
                 <td>{customer.customer_country}</td>
                 <td className="button-group">
-                  <button className="edit-btn" onClick={() => handleEdit(customer)}>Edit</button>
-                  <button className="delete-btn" onClick={() => handleDelete(customer.customer_id)}>Delete</button>
+                  <button className="edit-btn" onClick={() => handleEdit(customer)}
+                    >
+                      <FontAwesomeIcon icon="fa-solid fa-pen-to-square" style={{color: "#ffffff",}} />
+                      Edit
+
+                    </button>
+                  <button className="delete-btn" onClick={() => handleDelete(customer.customer_id)}
+                    >
+                      <FontAwesomeIcon icon="fa-solid fa-trash-can" style={{color: "#ffffff",}} />
+                      Delete
+                    </button>
                 </td>
               </tr>
             ))
@@ -128,5 +157,5 @@ export default function CustomerManagement() {
         </tbody>
       </table>
     </div>
-  );
+  );  
 }
