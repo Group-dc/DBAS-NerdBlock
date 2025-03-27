@@ -83,3 +83,24 @@ export async function PUT(req) {
     return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
 }
+
+export async function DELETE(req) {
+  try {
+    const { subscription_id } = await req.json();
+
+    if (!subscription_id) {
+      return new Response(JSON.stringify({ error: "Missing subscription_id" }), { status: 400 });
+    }
+
+    const { error } = await supabase
+      .from('Subscription')
+      .delete()
+      .eq('subscription_id', subscription_id);
+
+    if (error) throw error;
+
+    return new Response(JSON.stringify({ message: "Subscription deleted successfully" }), { status: 200 });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+  }
+}

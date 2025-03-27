@@ -206,10 +206,6 @@ td:last-child {
 }
 
 /* =============================== */
-/*      Buttons      */
-/* =============================== */
-
-/* =============================== */
 /*             Buttons             */
 /* =============================== */
 
@@ -262,6 +258,7 @@ button:hover {
 .logo-container {
   width: 100%;
   max-width: 100%;
+  max-height: 80%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -272,7 +269,9 @@ button:hover {
 .logo-container img {
   width: 100%;
   height: auto;
+  max-height: 80%;
   object-fit: cover;
+  border-radius: 10px;
 }
 
 /* =============================== */
@@ -395,3 +394,4 @@ button:hover {
 .modal-buttons button {
   flex: 1;
 }
+
