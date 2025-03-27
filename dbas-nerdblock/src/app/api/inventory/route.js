@@ -4,7 +4,20 @@ import { supabase } from '@/app/lib/supabase';
 export async function GET() {
   const { data, error } = await supabase
     .from('Inventory')
-    .select('inventory_id, inventory_quantity, inventory_location, Product(product_id, product_name)');
+    .select(`
+      inventory_id,
+      inventory_quantity,
+      inventory_location,
+      inventory_product_id,
+      Product (
+        product_id,
+        product_name,
+        product_description,
+        product_price,
+        product_shipment_month,
+        product_genre_id
+      )
+    `);
 
   if (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 500 });
@@ -28,7 +41,7 @@ export async function POST(req) {
       .insert([{
         inventory_quantity,
         inventory_location,
-        product_id
+        inventory_product_id: product_id
       }])
       .select();
 
