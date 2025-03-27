@@ -1,6 +1,17 @@
 // src/components/SubscriptionManagement.js
 'use client';
 import { useState, useEffect } from 'react';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas, faLock, faKey, faCircleXmark, faBagShopping } from '@fortawesome/free-solid-svg-icons';
+import { far, faUser, faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
+import { exportSubscriptionsToCSV } from '@/utils/exportUtils';
+
+// Add the icons to the library
+library.add(fas, faKey, faLock, far, faBagShopping, faUser, faEnvelope, faCircleXmark, fab);
 
 export default function SubscriptionManagement() {
   const [subscriptions, setSubscriptions] = useState([]);
@@ -16,6 +27,7 @@ export default function SubscriptionManagement() {
   const [showForm, setShowForm] = useState(false);
   const [customers, setCustomers] = useState([]);
   const [genres, setGenres] = useState([]);
+  const [activeCustomer, setActiveCustomer] = useState(null);
 
   useEffect(() => {
     fetchSubscriptions();
@@ -62,6 +74,7 @@ export default function SubscriptionManagement() {
         subscription_active: true,
       });
       setIsEditing(false);
+      setActiveCustomer(null);
     }
   }
 
@@ -74,17 +87,38 @@ export default function SubscriptionManagement() {
       subscription_genre_no: sub.Genre?.genre_no || '',
       subscription_active: sub.subscription_active,
     });
+    setActiveCustomer(`${sub.Customer?.customer_first_name || ''} ${sub.Customer?.customer_last_name || ''}`);
     setIsEditing(true);
     setShowForm(true);
+  }
+
+  async function handleDelete(subscription_id) {
+    const confirmDelete = window.confirm("Are you sure you want to delete this subscription?");
+    if (!confirmDelete) return;
+
+    const response = await fetch('/api/subscriptions', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ subscription_id }),
+    });
+
+    if (response.ok) {
+      fetchSubscriptions();
+    }
   }
 
   return (
     <div className={`subscription-container ${showForm ? 'modal-active' : ''}`}>
       <div className="header-div">
+
         <h1 className='header'>Subscription Management</h1>
-        <button className="primary-btn" onClick={() => { setShowForm(true); setIsEditing(false); }}>
-          Add Subscription
+
+        <button className="primary-btn" onClick={() => { setShowForm(true); setIsEditing(false); setActiveCustomer(null); }}
+          >
+            <FontAwesomeIcon icon="fa-solid fa-notes-medical" size="xl" style={{color: "#ffffff",}} />
+            Add Subscription
         </button>
+
       </div>
 
       {showForm && (
@@ -93,6 +127,28 @@ export default function SubscriptionManagement() {
           <div className="modal">
             <form className="customer-form" onSubmit={handleSubmit}>
               <h2>{isEditing ? 'Edit Subscription' : 'Add Subscription'}</h2>
+              {isEditing && activeCustomer && (
+                <p style={{ fontWeight: 'bold', marginBottom: '10px' }}>Customer: {activeCustomer}</p>
+              )}
+              {!isEditing && (
+                <div className="form-group">
+                  <label>Customer</label>
+                  <select
+                    value={formData.subscription_customer_id}
+                    onChange={(e) =>
+                      setFormData({ ...formData, subscription_customer_id: e.target.value })
+                    }
+                    required
+                  >
+                    <option value="">Select a customer</option>
+                    {customers.map((cust) => (
+                      <option key={cust.customer_id} value={cust.customer_id}>
+                        {cust.customer_first_name} {cust.customer_last_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
               <div className="form-group">
                 <label>Start Date</label>
                 <input type="date" value={formData.subscription_start_date} onChange={(e) => setFormData({ ...formData, subscription_start_date: e.target.value })} required />
@@ -100,23 +156,6 @@ export default function SubscriptionManagement() {
               <div className="form-group">
                 <label>End Date</label>
                 <input type="date" value={formData.subscription_end_date || ''} onChange={(e) => setFormData({ ...formData, subscription_end_date: e.target.value })} />
-              </div>
-              <div className="form-group">
-                <label>Customer</label>
-                <select
-                  value={formData.subscription_customer_id}
-                  onChange={(e) =>
-                    setFormData({ ...formData, subscription_customer_id: e.target.value })
-                  }
-                  required
-                >
-                  <option value="">Select a customer</option>
-                  {customers.map((cust) => (
-                    <option key={cust.customer_id} value={cust.customer_id}>
-                      {cust.customer_first_name} {cust.customer_last_name}
-                    </option>
-                  ))}
-                </select>
               </div>
               <div className="form-group">
                 <label>Genre</label>
@@ -165,7 +204,16 @@ export default function SubscriptionManagement() {
                 {sub.subscription_active ? 'Active' : 'Inactive'}
               </span></td>
               <td className="button-group">
-                <button className="edit-btn" onClick={() => handleEdit(sub)}>Edit</button>
+                <button className="edit-btn" onClick={() => handleEdit(sub)}
+                  >
+                  <FontAwesomeIcon icon="fa-solid fa-pen-to-square" style={{color: "#ffffff",}} />
+                    Edit
+                </button>
+                <button className="delete-btn" onClick={() => handleDelete(sub.subscription_id)}
+                  >
+                    <FontAwesomeIcon icon="fa-solid fa-trash-can" style={{color: "#ffffff",}} />
+                    Delete
+                </button>
               </td>
             </tr>
           ))}

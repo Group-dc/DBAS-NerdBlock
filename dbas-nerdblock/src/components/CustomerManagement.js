@@ -1,3 +1,4 @@
+// src/components/CustomerManagement.js
 'use client';
 import { useState, useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
