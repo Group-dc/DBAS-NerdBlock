@@ -125,13 +125,13 @@ export default function SubscriptionManagement() {
         <>
           <div className="modal-overlay" onClick={() => setShowForm(false)}></div>
           <div className="modal">
-            <form className="customer-form" onSubmit={handleSubmit}>
+            <form className="subscription-form" onSubmit={handleSubmit}>
               <h2>{isEditing ? 'Edit Subscription' : 'Add Subscription'}</h2>
               {isEditing && activeCustomer && (
                 <p style={{ fontWeight: 'bold', marginBottom: '10px' }}>Customer: {activeCustomer}</p>
               )}
               {!isEditing && (
-                <div className="form-group">
+                <div className="subscription-group">
                   <label>Customer</label>
                   <select
                     value={formData.subscription_customer_id}
@@ -149,15 +149,15 @@ export default function SubscriptionManagement() {
                   </select>
                 </div>
               )}
-              <div className="form-group">
+              <div className="subscription-group">
                 <label>Start Date</label>
                 <input type="date" value={formData.subscription_start_date} onChange={(e) => setFormData({ ...formData, subscription_start_date: e.target.value })} required />
               </div>
-              <div className="form-group">
+              <div className="subscription-group">
                 <label>End Date</label>
                 <input type="date" value={formData.subscription_end_date || ''} onChange={(e) => setFormData({ ...formData, subscription_end_date: e.target.value })} />
               </div>
-              <div className="form-group">
+              <div className="subscription-group">
                 <label>Genre</label>
                 <select
                   value={formData.subscription_genre_no}
@@ -174,7 +174,7 @@ export default function SubscriptionManagement() {
                   ))}
                 </select>
               </div>
-              <div className="form-group">
+              <div className="subscription-group">
                 <label>Status</label>
                 <select value={formData.subscription_active} onChange={(e) => setFormData({ ...formData, subscription_active: e.target.value === 'true' })}>
                   <option value="true">Active</option>

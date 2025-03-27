@@ -1,6 +1,15 @@
 import "./globals.css";
 import Link from "next/link";
 import Image from "next/image";
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas, faLock, faKey, faCircleXmark, faBagShopping } from '@fortawesome/free-solid-svg-icons';
+import { far, faUser, faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
+// Add the icons to the library
+library.add(fas, faKey, faLock, far, faBagShopping, faUser, faEnvelope, faCircleXmark, fab);
 
 export const metadata = {
   title: "NerdBlock Management",
@@ -22,12 +31,12 @@ export default function RootLayout({ children }) {
             <nav>
 
               <ul>
-                <li><Link href="/">Dashboard</Link></li>
-                <li><Link href="/pages/orders">Orders</Link></li>
-                <li><Link href="/pages/inventory">Inventory</Link></li>
-                <li><Link href="/pages/customers">Customers</Link></li>
-                <li><Link href="/pages/subscriptions">Subscriptions</Link></li>
-                <li><Link href="/pages/reporting">Reports</Link></li>
+              <li><Link href="/"><FontAwesomeIcon icon="fa-solid fa-chart-line" className="dash-icon"/> Dashboard</Link></li>
+                <li><Link href="/pages/orders"><FontAwesomeIcon icon="fa-solid fa-store" className="dash-icon"/> Orders</Link></li>
+                <li><Link href="/pages/inventory"><FontAwesomeIcon icon="fa-solid fa-boxes-stacked" className="dash-icon"/> Inventory</Link></li>
+                <li><Link href="/pages/customers"><FontAwesomeIcon icon="fa-solid fa-user" className="dash-icon"/> Customers</Link></li>
+                <li><Link href="/pages/subscriptions"><FontAwesomeIcon icon="fa-solid fa-calendar-day" className="dash-icon"/> Subscriptions</Link></li>
+                <li><Link href="/pages/reporting"><FontAwesomeIcon icon="fa-solid fa-clipboard-list" className="dash-icon"/> Reports</Link></li>
               </ul>
             </nav>
           </aside>
