@@ -250,7 +250,7 @@ button:hover {
 
 .button-group {
   display: flex;
-  gap: 6px;
+  gap: 10px;
 }
 
 
@@ -355,6 +355,51 @@ button:hover {
 }
 
 /* =============================== */
+/*      Inventory Form Modal      */
+/* =============================== */
+
+.inventory-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.inventory-form h2 {
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: #565b5c;
+}
+
+.inventory-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.inventory-group label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #565b5c;
+}
+
+.inventory-group input {
+  padding: 10px;
+  border: 1.5px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.inventory-group select {
+  padding: 8px;
+}
+
+.inventory-group input:focus {
+  border-color: #1ca5c8;
+  outline: none;
+  box-shadow: 0 0 4px rgba(28, 165, 200, 0.3);
+}
+
+/* =============================== */
 /*      Product Details Modal      */
 /* =============================== */
 
@@ -395,3 +440,55 @@ button:hover {
   flex: 1;
 }
 
+/* =============================== */
+/*      Subscription Form Modal      */
+/* =============================== */
+
+.subscription-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.subscription-form h2 {
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: #565b5c;
+}
+
+.subscription-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.subscription-group label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #565b5c;
+}
+
+.subscription-group input {
+  padding: 10px;
+  border: 1.5px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.subscription-group select {
+  padding: 8px;
+}
+
+.subscription-group input:focus {
+  border-color: #1ca5c8;
+  outline: none;
+  box-shadow: 0 0 4px rgba(28, 165, 200, 0.3);
+}
+
+/* =============================== */
+/*              Icons              */
+/* =============================== */
+
+.dash-icon {
+  font-size: 20px;
+}

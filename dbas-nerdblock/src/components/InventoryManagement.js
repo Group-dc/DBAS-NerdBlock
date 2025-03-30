@@ -1,6 +1,15 @@
 // src/components/InventoryManagement.js
 'use client';
 import { useState, useEffect } from 'react';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas, faLock, faKey, faCircleXmark, faBagShopping } from '@fortawesome/free-solid-svg-icons';
+import { far, faUser, faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
+// Add the icons to the library
+library.add(fas, faKey, faLock, far, faBagShopping, faUser, faEnvelope, faCircleXmark, fab);
 
 export default function InventoryManagement() {
 
@@ -284,7 +293,8 @@ export default function InventoryManagement() {
             setShowForm(true);
           }}
         >
-          Add Product
+          <FontAwesomeIcon icon="fa-solid fa-square-plus" size="xl" style={{color: "#ffffff",}} />
+          Add Product 
         </button>
 
       </div>
@@ -303,7 +313,7 @@ export default function InventoryManagement() {
               <h2>{isEditing ? 'Edit Inventory' : 'Add Product'}</h2>
 
               {/* ===== Product Fields ===== */}
-              <div className="form-group">
+              <div className="inventory-group">
                 <label>Product Name</label>
                 <input
                   type="text"
@@ -313,7 +323,7 @@ export default function InventoryManagement() {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="inventory-group">
                 <label>Description</label>
                 <input
                   type="text"
@@ -322,7 +332,7 @@ export default function InventoryManagement() {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="inventory-group">
                 <label>Price</label>
                 <input
                   type="number"
@@ -336,7 +346,7 @@ export default function InventoryManagement() {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="inventory-group">
                 <label>Shipment Month</label>
                 <select
                   value={selectedMonth}
@@ -371,7 +381,7 @@ export default function InventoryManagement() {
                 </select>
               </div>
 
-              <div className="form-group">
+              <div className="inventory-group">
                 <label>Genre</label>
                 <select
                   value={formData.product_genre_id}
@@ -388,7 +398,7 @@ export default function InventoryManagement() {
               </div>
 
               {/* ===== Inventory Fields ===== */}
-              <div className="form-group">
+              <div className="inventory-group">
                 <label>Inventory Quantity</label>
                 <input
                   type="number"
@@ -405,7 +415,7 @@ export default function InventoryManagement() {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="inventory-group">
                 <label>Inventory Location</label>
                 <select
                   value={formData.inventory_location}
@@ -446,7 +456,7 @@ export default function InventoryManagement() {
                   <button
                     className="product-name-btn"
                     onClick={() => handleProductClick(item.Product?.product_id)}
-                    style={{ background: "none", border: "none", color: "blue", textDecoration: "underline", cursor: "pointer" }}
+                    style={{ background: "none", border: "none", color: "#565b5c", textDecoration: "underline", cursor: "pointer" }}
                   >
                     {item.Product?.product_name || 'Unknown'}
                   </button>
@@ -454,8 +464,10 @@ export default function InventoryManagement() {
                 <td>{item.inventory_quantity}</td>
                 <td>{item.inventory_location}</td>
                 <td className="button-group">
-                  <button className="edit-btn" onClick={() => handleEdit(item)}>Edit</button>
-                  <button className="delete-btn" onClick={() => handleDelete(item.inventory_id)}>Delete</button>
+                  <button className="edit-btn" onClick={() => handleEdit(item)}>
+                    <FontAwesomeIcon icon="fa-solid fa-pen-to-square" style={{color: "#ffffff",}} /> Edit</button>
+                  <button className="delete-btn" onClick={() => handleDelete(item.inventory_id)}>
+                    <FontAwesomeIcon icon="fa-solid fa-trash-can" style={{color: "#ffffff",}} /> Delete</button>
                 </td>
               </tr>
             ))
