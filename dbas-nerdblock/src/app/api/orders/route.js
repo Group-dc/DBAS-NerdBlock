@@ -1,5 +1,6 @@
 import { supabase } from '@/app/lib/supabase';
 
+// Fetch all orders with basic customer info
 export async function GET() {
   const { data, error } = await supabase
     .from('Order')
@@ -12,28 +13,26 @@ export async function GET() {
   return new Response(JSON.stringify(data), { status: 200 });
 }
 
+// Delete an order and its linked subscriptions
 export async function DELETE(req) {
   try {
     const { order_id } = await req.json();
-
     if (!order_id) {
       return new Response(JSON.stringify({ error: "Order ID is required" }), { status: 400 });
     }
 
-    // Step 1: Delete related Order_Subscriptions
+    // Remove any linked entries in Order_Subscriptions
     const { error: subDeleteError } = await supabase
       .from('Order_Subscriptions')
       .delete()
       .eq('order_subscription_order_id', order_id);
-
     if (subDeleteError) throw subDeleteError;
 
-    // Step 2: Delete the order itself
+    // Then delete the order itself
     const { error: orderDeleteError } = await supabase
       .from('Order')
       .delete()
       .eq('order_id', order_id);
-
     if (orderDeleteError) throw orderDeleteError;
 
     return new Response(JSON.stringify({ message: 'Order and linked subscriptions deleted' }), { status: 200 });
@@ -43,6 +42,7 @@ export async function DELETE(req) {
   }
 }
 
+// Update an existing order (shipping date or status)
 export async function PUT(req) {
   try {
     const body = await req.json();
@@ -69,6 +69,7 @@ export async function PUT(req) {
   }
 }
 
+// Create a new order and link subscriptions to it
 export async function POST(req) {
   try {
     const body = await req.json();
@@ -85,7 +86,7 @@ export async function POST(req) {
 
     const finalDate = order_shipping_date || new Date().toISOString().split('T')[0];
 
-    // Step 1: Create the order
+    // Insert the order
     const { data: orderData, error: orderError } = await supabase
       .from('Order')
       .insert([
@@ -97,10 +98,9 @@ export async function POST(req) {
       ])
       .select()
       .single();
-
     if (orderError) throw orderError;
 
-    // Step 2: Create Order_Subscriptions entries
+    // Insert the linked subscriptions
     const orderSubEntries = subscription_ids.map((subId) => ({
       order_subscription_order_id: orderData.order_id,
       order_subscription_subscription_id: subId,
@@ -109,7 +109,6 @@ export async function POST(req) {
     const { error: subError } = await supabase
       .from('Order_Subscriptions')
       .insert(orderSubEntries);
-
     if (subError) throw subError;
 
     return new Response(

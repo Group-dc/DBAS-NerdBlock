@@ -1,5 +1,6 @@
 import { supabase } from '@/app/lib/supabase';
 
+// Fetch all active subscriptions for a specific customer (by ID)
 export async function GET(req, context) {
   const { id } = await context.params;
 
@@ -12,8 +13,8 @@ export async function GET(req, context) {
       subscription_start_date,
       subscription_end_date
     `)
-    .eq('subscription_customer_id', id)
-    .eq('subscription_active', true);
+    .eq('subscription_customer_id', id)     // Filter by customer ID
+    .eq('subscription_active', true);       // Only include active subscriptions
 
   if (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 500 });

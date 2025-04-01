@@ -136,18 +136,18 @@ export default function OrderManagement() {
     <div className="order-container">
       <div className="header-div">
         <h1 className="header">Order Management</h1>
+        <button
+          className="primary-btn"
+          onClick={() => {
+            resetForm();
+            setFormMode('add');
+            setShowForm(true);
+          }}
+        >
+          Add Order
+        </button>
       </div>
 
-      <button
-        className="primary-btn"
-        onClick={() => {
-          resetForm();
-          setFormMode('add');
-          setShowForm(true);
-        }}
-      >
-        Add Order
-      </button>
 
       <table>
         <thead>
@@ -224,10 +224,18 @@ export default function OrderManagement() {
                           required
                         >
                           <option value="">-- Select Subscription --</option>
-                          {subscriptions.map((sub) => (
-                            <option key={sub.subscription_id} value={sub.subscription_id}>
-                              #{sub.subscription_id} — {sub.Genre?.genre_name || 'Unknown Genre'}
-                            </option>
+                          {subscriptions
+                            .filter((sub) => {
+                              // Only allow options that aren't already selected in another dropdown
+                              return (
+                                sub.subscription_id === subId || // Always include the current one in this dropdown
+                                !formData.subscription_ids.includes(sub.subscription_id)
+                              );
+                            })
+                            .map((sub) => (
+                              <option key={sub.subscription_id} value={sub.subscription_id}>
+                                #{sub.subscription_id} — {sub.Genre?.genre_name || 'Unknown Genre'}
+                              </option>
                           ))}
                         </select>
                         <button

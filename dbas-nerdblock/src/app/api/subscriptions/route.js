@@ -92,15 +92,25 @@ export async function DELETE(req) {
       return new Response(JSON.stringify({ error: "Missing subscription_id" }), { status: 400 });
     }
 
-    const { error } = await supabase
+    // Delete associated rows in Order_Subscription
+    const { error: subLinkError } = await supabase
+      .from('Order_Subscriptions')
+      .delete()
+      .eq('order_subscription_subscription_id', subscription_id);
+
+    if (subLinkError) throw subLinkError;
+
+    // Delete the subscription itself
+    const { error: subscriptionError } = await supabase
       .from('Subscription')
       .delete()
       .eq('subscription_id', subscription_id);
 
-    if (error) throw error;
+    if (subscriptionError) throw subscriptionError;
 
     return new Response(JSON.stringify({ message: "Subscription deleted successfully" }), { status: 200 });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    return new Response(JSON.stringify({ error: error.message || "Unknown server error" }), { status: 500 });
   }
 }
+
