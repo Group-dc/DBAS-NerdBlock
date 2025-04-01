@@ -494,12 +494,77 @@ button:hover {
 }
 
 /* =============================== */
-/*             Orders              */
+/*         Order Form Modal        */
 /* =============================== */
 
-.subscription-row {
+.order-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.order-form h2 {
   margin-bottom: 10px;
+  font-size: 20px;
+  color: #565b5c;
+}
+
+.order-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.order-group label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #565b5c;
+}
+
+.order-group input,
+.order-group select {
+  padding: 10px;
+  border: 1.5px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.order-group input:focus,
+.order-group select:focus {
+  border-color: #1ca5c8;
+  outline: none;
+  box-shadow: 0 0 4px rgba(28, 165, 200, 0.3);
+}
+
+/* Subscription Row for Multi-Selects */
+.subscription-row {
   display: flex;
   gap: 10px;
+  margin-bottom: 10px;
   align-items: center;
+}
+
+.subscription-row select {
+  flex: 1;
+  padding: 8px;
+}
+
+/* Status Pill */
+.status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.status.processed {
+  background-color: #4caf50;
+  color: white;
+}
+
+.status.pending {
+  background-color: #f0ad4e;
+  color: white;
 }

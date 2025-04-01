@@ -1,4 +1,9 @@
 'use client';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas, faSquarePlus, faPenToSquare, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+library.add(fas, faSquarePlus, faPenToSquare, faTrashCan);
 import { useState, useEffect } from 'react';
 
 export default function OrderManagement() {
@@ -130,7 +135,6 @@ export default function OrderManagement() {
       alert(`Error ${formMode === 'edit' ? 'updating' : 'creating'} order.`);
     }
   }
-
   // === RENDER ===
   return (
     <div className="order-container">
@@ -144,10 +148,10 @@ export default function OrderManagement() {
             setShowForm(true);
           }}
         >
+          <FontAwesomeIcon icon="fa-solid fa-square-plus" size="xl" style={{ color: '#ffffff', marginRight: '6px' }} />
           Add Order
         </button>
       </div>
-
 
       <table>
         <thead>
@@ -171,8 +175,14 @@ export default function OrderManagement() {
                 </span>
               </td>
               <td className="button-group">
-                <button className="edit-btn" onClick={() => handleEdit(order)}>Edit</button>
-                <button className="delete-btn" onClick={() => handleDelete(order.order_id)}>Delete</button>
+                <button className="edit-btn" onClick={() => handleEdit(order)}>
+                  <FontAwesomeIcon icon="fa-solid fa-pen-to-square" style={{ color: '#ffffff' }} />
+                  Edit
+                </button>
+                <button className="delete-btn" onClick={() => handleDelete(order.order_id)}>
+                  <FontAwesomeIcon icon="fa-solid fa-trash-can" style={{ color: '#ffffff' }} />
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
@@ -189,15 +199,17 @@ export default function OrderManagement() {
               {formMode === 'add' && (
                 <>
                   {/* Customer Dropdown */}
-                  <div className="form-group">
+                  <div className="order-group">
                     <label>Customer</label>
                     <select
                       value={formData.customer_id}
-                      onChange={(e) => setFormData({
-                        ...formData,
-                        customer_id: e.target.value,
-                        subscription_ids: [''],
-                      })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          customer_id: e.target.value,
+                          subscription_ids: [''],
+                        })
+                      }
                       required
                     >
                       <option value="">-- Select Customer --</option>
@@ -209,8 +221,8 @@ export default function OrderManagement() {
                     </select>
                   </div>
 
-                  {/* Subscriptions Dropdowns */}
-                  <div className="form-group">
+                  {/* Subscriptions Multi-Select */}
+                  <div className="order-group">
                     <label>Subscriptions</label>
                     {formData.subscription_ids.map((subId, index) => (
                       <div key={index} className="subscription-row">
@@ -225,18 +237,15 @@ export default function OrderManagement() {
                         >
                           <option value="">-- Select Subscription --</option>
                           {subscriptions
-                            .filter((sub) => {
-                              // Only allow options that aren't already selected in another dropdown
-                              return (
-                                sub.subscription_id === subId || // Always include the current one in this dropdown
-                                !formData.subscription_ids.includes(sub.subscription_id)
-                              );
-                            })
+                            .filter((sub) =>
+                              sub.subscription_id === subId ||
+                              !formData.subscription_ids.includes(sub.subscription_id)
+                            )
                             .map((sub) => (
                               <option key={sub.subscription_id} value={sub.subscription_id}>
                                 #{sub.subscription_id} — {sub.Genre?.genre_name || 'Unknown Genre'}
                               </option>
-                          ))}
+                            ))}
                         </select>
                         <button
                           type="button"
@@ -255,10 +264,12 @@ export default function OrderManagement() {
                     <button
                       type="button"
                       className="primary-btn"
-                      onClick={() => setFormData({
-                        ...formData,
-                        subscription_ids: [...formData.subscription_ids, ''],
-                      })}
+                      onClick={() =>
+                        setFormData({
+                          ...formData,
+                          subscription_ids: [...formData.subscription_ids, ''],
+                        })
+                      }
                     >
                       + Add Subscription
                     </button>
@@ -266,25 +277,27 @@ export default function OrderManagement() {
                 </>
               )}
 
-              {/* Shared Fields */}
-              <div className="form-group">
+              {/* Shipping Date */}
+              <div className="order-group">
                 <label>Shipping Date</label>
                 <input
                   type="date"
                   value={formData.order_shipping_date}
-                  onChange={(e) => setFormData({ ...formData, order_shipping_date: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, order_shipping_date: e.target.value })
+                  }
                   required
                 />
               </div>
 
-              <div className="form-group">
+              {/* Status Dropdown */}
+              <div className="order-group">
                 <label>Status</label>
                 <select
                   value={formData.order_processed ? 'Processed' : 'Pending'}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    order_processed: e.target.value === 'Processed',
-                  })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, order_processed: e.target.value === 'Processed' })
+                  }
                 >
                   <option value="Pending">Pending</option>
                   <option value="Processed">Processed</option>
@@ -295,7 +308,9 @@ export default function OrderManagement() {
                 <button type="submit" className="save-btn">
                   {formMode === 'add' ? 'Create' : 'Save'}
                 </button>
-                <button type="button" className="cancel-btn" onClick={resetForm}>Cancel</button>
+                <button type="button" className="cancel-btn" onClick={resetForm}>
+                  Cancel
+                </button>
               </div>
             </form>
           </div>
