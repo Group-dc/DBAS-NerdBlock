@@ -1,4 +1,3 @@
-// src/components/InventoryManagement.js
 'use client';
 import { useState, useEffect } from 'react';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -8,16 +7,13 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
-// Add the icons to the library
+// FontAwesome setup
 library.add(fas, faKey, faLock, far, faBagShopping, faUser, faEnvelope, faCircleXmark, fab);
 
 export default function InventoryManagement() {
-
-  // Variables for data
+  // === STATE ===
   const [inventory, setInventory] = useState([]);
   const [genres, setGenres] = useState([]);
-
-  // Data for the modal form
   const [formData, setFormData] = useState({
     inventory_id: '',
     inventory_quantity: '',
@@ -28,32 +24,18 @@ export default function InventoryManagement() {
     product_shipment_month: '',
     product_genre_id: '',
   });
-
-  // For the month selection
   const [selectedMonth, setSelectedMonth] = useState('');
-
-  const monthMap = {
-    January: '01',
-    February: '02',
-    March: '03',
-    April: '04',
-    May: '05',
-    June: '06',
-    July: '07',
-    August: '08',
-    September: '09',
-    October: '10',
-    November: '11',
-    December: '12',
-  };  
-  
-  // Bools in the names
   const [isEditing, setIsEditing] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showProductModal, setShowProductModal] = useState(false);
 
-  // Resets the form
+  const monthMap = {
+    January: '01', February: '02', March: '03', April: '04', May: '05', June: '06',
+    July: '07', August: '08', September: '09', October: '10', November: '11', December: '12',
+  };
+
+  // === FORM RESET ===
   function resetForm() {
     setFormData({
       inventory_id: '',
@@ -65,35 +47,34 @@ export default function InventoryManagement() {
       product_shipment_month: '',
       product_genre_id: '',
     });
-  
     setIsEditing(false);
     setShowForm(false);
     setSelectedMonth('');
   }
 
-  // Fetching Data
+  // === FETCH DATA ===
   useEffect(() => {
     fetchInventory();
     fetchGenres();
   }, []);
-  
+
   async function fetchGenres() {
     try {
-      const response = await fetch('/api/genres');
-      if (!response.ok) throw new Error('Failed to fetch genres');
-      const data = await response.json();
+      const res = await fetch('/api/genres');
+      if (!res.ok) throw new Error('Failed to fetch genres');
+      const data = await res.json();
       setGenres(data);
     } catch (error) {
       console.error(error);
       alert("Error loading genres.");
     }
-  }  
+  }
 
   async function fetchInventory() {
     try {
-      const response = await fetch('/api/inventory');
-      if (!response.ok) throw new Error("Failed to fetch inventory");
-      const data = await response.json();
+      const res = await fetch('/api/inventory');
+      if (!res.ok) throw new Error("Failed to fetch inventory");
+      const data = await res.json();
       setInventory(data);
     } catch (error) {
       console.error(error);
@@ -101,21 +82,21 @@ export default function InventoryManagement() {
     }
   }
 
+  // === PRODUCT DETAILS MODAL ===
   async function handleProductClick(productId) {
     try {
-      console.log("Fetching product with ID:", productId);
-      const response = await fetch(`/api/product/${productId}`);
-      if (!response.ok) throw new Error("Failed to fetch product info");
-      const data = await response.json();
-      console.log("Product data:", data);
+      const res = await fetch(`/api/product/${productId}`);
+      if (!res.ok) throw new Error("Failed to fetch product info");
+      const data = await res.json();
       setSelectedProduct(data);
       setShowProductModal(true);
     } catch (error) {
       console.error(error);
       alert("Could not load product details.");
     }
-  }  
+  }
 
+  // === HANDLE EDIT ===
   function handleEdit(item) {
     setFormData({
       inventory_id: item.inventory_id,
@@ -128,67 +109,57 @@ export default function InventoryManagement() {
       product_shipment_month: item.Product?.product_shipment_month || '',
       product_genre_id: item.Product?.product_genre_id || '',
     });
-  
-    // for the month dropdown
+
     setSelectedMonth(
       item.Product?.product_shipment_month
         ? new Date(item.Product.product_shipment_month).toLocaleString('default', { month: 'long' })
         : ''
     );
-  
+
     setIsEditing(true);
     setShowForm(true);
-  }  
+  }
 
+  // === HANDLE DELETE ===
   async function handleDelete(inventory_id) {
     const confirmed = window.confirm('Are you sure you want to delete this item and its product?');
     if (!confirmed) return;
-  
+
     try {
-      // Step 1: Fetch the inventory item to get product_id
-      const inventoryRes = await fetch('/api/inventory');
-      if (!inventoryRes.ok) throw new Error("Failed to fetch inventory data");
-  
-      const inventoryData = await inventoryRes.json();
-      const inventoryItem = inventoryData.find(item => item.inventory_id === inventory_id);
-  
-      if (!inventoryItem || !inventoryItem.Product?.product_id) {
-        throw new Error("Could not find related product for this inventory item");
-      }
-  
-      const product_id = inventoryItem.Product.product_id;
-  
-      // Step 2: Delete inventory item
-      const deleteInventoryRes = await fetch('/api/inventory', {
+      const res = await fetch('/api/inventory');
+      if (!res.ok) throw new Error("Failed to fetch inventory data");
+      const inventoryData = await res.json();
+      const item = inventoryData.find(item => item.inventory_id === inventory_id);
+      if (!item || !item.Product?.product_id) throw new Error("Could not find related product");
+
+      // Delete inventory
+      const invDelete = await fetch('/api/inventory', {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ inventory_id }),
       });
-  
-      if (!deleteInventoryRes.ok) throw new Error("Failed to delete inventory");
-  
-      // Step 3: Delete associated product
-      const deleteProductRes = await fetch(`/api/product/${product_id}`, {
-        method: 'DELETE',
-      });
-  
-      if (!deleteProductRes.ok) throw new Error("Failed to delete related product");
-  
-      alert('Inventory and associated product deleted successfully.');
+      if (!invDelete.ok) throw new Error("Failed to delete inventory");
+
+      // Delete product
+      const prodDelete = await fetch(`/api/product/${item.Product.product_id}`, { method: 'DELETE' });
+      if (!prodDelete.ok) throw new Error("Failed to delete product");
+
+      alert('Deleted successfully.');
       fetchInventory();
     } catch (error) {
       console.error('Delete Error:', error.message);
       alert(`Error deleting item: ${error.message}`);
     }
-  }  
+  }
 
+  // === HANDLE SUBMIT ===
   async function handleSubmit(e) {
     e.preventDefault();
 
     if (isEditing) {
       try {
-        // 1. Update inventory
-        const inventoryRes = await fetch('/api/inventory', {
+        // Update inventory
+        const invRes = await fetch('/api/inventory', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -197,11 +168,10 @@ export default function InventoryManagement() {
             inventory_location: formData.inventory_location,
           }),
         });
-    
-        if (!inventoryRes.ok) throw new Error("Failed to update inventory");
-    
-        // 2. Update product
-        const productRes = await fetch(`/api/product/${formData.product_id}`, {
+        if (!invRes.ok) throw new Error("Failed to update inventory");
+
+        // Update product
+        const prodRes = await fetch(`/api/product/${formData.product_id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -212,9 +182,8 @@ export default function InventoryManagement() {
             product_genre_id: formData.product_genre_id,
           }),
         });
-    
-        if (!productRes.ok) throw new Error("Failed to update product");
-    
+        if (!prodRes.ok) throw new Error("Failed to update product");
+
         fetchInventory();
         resetForm();
       } catch (error) {
@@ -223,8 +192,8 @@ export default function InventoryManagement() {
       }
     } else {
       try {
-        // 1. Create the product
-        const productResponse = await fetch('/api/product', {
+        // Create product
+        const prodRes = await fetch('/api/product', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -235,27 +204,13 @@ export default function InventoryManagement() {
             product_genre_id: formData.product_genre_id,
           }),
         });
+        const prodData = await prodRes.json();
+        if (!prodRes.ok) throw new Error(`Failed to create product: ${prodData.error || 'Unknown error'}`);
+        const product_id = prodData.data?.[0]?.product_id;
+        if (!product_id) throw new Error("Product ID not returned");
 
-        const productData = await productResponse.json();
-        console.log("Product response data:", productData);
-
-        if (!productResponse.ok) {
-          throw new Error(`Failed to create product: ${productData.error || 'Unknown error'}`);
-        }
-
-        const product_id = productData.data?.[0]?.product_id;
-        if (!product_id) {
-          throw new Error("Product ID not returned from API");
-        }
-
-        console.log("Creating inventory with:", {
-          inventory_quantity: formData.inventory_quantity,
-          inventory_location: formData.inventory_location,
-          product_id,
-        });
-
-        // 2. Create the inventory item linked to product_id
-        const inventoryResponse = await fetch('/api/inventory', {
+        // Create inventory
+        const invRes = await fetch('/api/inventory', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -264,13 +219,8 @@ export default function InventoryManagement() {
             product_id,
           }),
         });
-
-        const inventoryData = await inventoryResponse.json();
-        console.log("Inventory response:", inventoryData);
-
-        if (!inventoryResponse.ok) {
-          throw new Error(`Failed to create inventory: ${inventoryData.error || 'Unknown error'}`);
-        }
+        const invData = await invRes.json();
+        if (!invRes.ok) throw new Error(`Failed to create inventory: ${invData.error || 'Unknown error'}`);
 
         fetchInventory();
         resetForm();
@@ -283,8 +233,9 @@ export default function InventoryManagement() {
   
   return (
     <div className="inventory-container">
+      {/* === Header and Add Button === */}
       <div className="header-div">
-        <h1 className='header'>Inventory Management</h1>
+        <h1 className="header">Inventory Management</h1>
         <button
           className="primary-btn"
           onClick={() => {
@@ -293,12 +244,12 @@ export default function InventoryManagement() {
             setShowForm(true);
           }}
         >
-          <FontAwesomeIcon icon="fa-solid fa-square-plus" size="xl" style={{color: "#ffffff",}} />
-          Add Product 
+          <FontAwesomeIcon icon="fa-solid fa-square-plus" size="xl" style={{ color: "#ffffff" }} />
+          Add Product
         </button>
-
       </div>
-
+  
+      {/* === Modal: Form for Add/Edit === */}
       {showForm && (
         <>
           <div className="modal-overlay" onClick={() => setShowForm(false)}></div>
@@ -311,8 +262,8 @@ export default function InventoryManagement() {
               }}
             >
               <h2>{isEditing ? 'Edit Inventory' : 'Add Product'}</h2>
-
-              {/* ===== Product Fields ===== */}
+  
+              {/* === Product Fields === */}
               <div className="inventory-group">
                 <label>Product Name</label>
                 <input
@@ -322,7 +273,7 @@ export default function InventoryManagement() {
                   required
                 />
               </div>
-
+  
               <div className="inventory-group">
                 <label>Description</label>
                 <input
@@ -331,7 +282,7 @@ export default function InventoryManagement() {
                   onChange={(e) => setFormData({ ...formData, product_description: e.target.value })}
                 />
               </div>
-
+  
               <div className="inventory-group">
                 <label>Price</label>
                 <input
@@ -345,7 +296,7 @@ export default function InventoryManagement() {
                   required
                 />
               </div>
-
+  
               <div className="inventory-group">
                 <label>Shipment Month</label>
                 <select
@@ -353,7 +304,6 @@ export default function InventoryManagement() {
                   onChange={(e) => {
                     const month = e.target.value;
                     setSelectedMonth(month);
-
                     if (month) {
                       const currentYear = new Date().getFullYear();
                       const formattedMonth = monthMap[month];
@@ -366,21 +316,12 @@ export default function InventoryManagement() {
                   required
                 >
                   <option value="">-- Select Month --</option>
-                  <option value="January">January</option>
-                  <option value="February">February</option>
-                  <option value="March">March</option>
-                  <option value="April">April</option>
-                  <option value="May">May</option>
-                  <option value="June">June</option>
-                  <option value="July">July</option>
-                  <option value="August">August</option>
-                  <option value="September">September</option>
-                  <option value="October">October</option>
-                  <option value="November">November</option>
-                  <option value="December">December</option>
+                  {Object.keys(monthMap).map((month) => (
+                    <option key={month} value={month}>{month}</option>
+                  ))}
                 </select>
               </div>
-
+  
               <div className="inventory-group">
                 <label>Genre</label>
                 <select
@@ -396,8 +337,8 @@ export default function InventoryManagement() {
                   ))}
                 </select>
               </div>
-
-              {/* ===== Inventory Fields ===== */}
+  
+              {/* === Inventory Fields === */}
               <div className="inventory-group">
                 <label>Inventory Quantity</label>
                 <input
@@ -408,13 +349,13 @@ export default function InventoryManagement() {
                   onChange={(e) =>
                     setFormData({
                       ...formData,
-                      inventory_quantity: e.target.value.replace(/\D/g, ''), // only digits
+                      inventory_quantity: e.target.value.replace(/\D/g, ''),
                     })
                   }
                   required
                 />
               </div>
-
+  
               <div className="inventory-group">
                 <label>Inventory Location</label>
                 <select
@@ -428,7 +369,8 @@ export default function InventoryManagement() {
                   <option value="Warehouse C - Montreal">Warehouse C - Montreal</option>
                 </select>
               </div>
-
+  
+              {/* === Modal Buttons === */}
               <div className="modal-buttons">
                 <button className="save-btn" type="submit">{isEditing ? 'Update' : 'Create'}</button>
                 <button className="cancel-btn" type="button" onClick={() => setShowForm(false)}>Cancel</button>
@@ -437,8 +379,8 @@ export default function InventoryManagement() {
           </div>
         </>
       )}
-
-
+  
+      {/* === Inventory Table === */}
       <table>
         <thead>
           <tr>
@@ -465,35 +407,39 @@ export default function InventoryManagement() {
                 <td>{item.inventory_location}</td>
                 <td className="button-group">
                   <button className="edit-btn" onClick={() => handleEdit(item)}>
-                    <FontAwesomeIcon icon="fa-solid fa-pen-to-square" style={{color: "#ffffff",}} /> Edit</button>
+                    <FontAwesomeIcon icon="fa-solid fa-pen-to-square" style={{ color: "#ffffff" }} /> Edit
+                  </button>
                   <button className="delete-btn" onClick={() => handleDelete(item.inventory_id)}>
-                    <FontAwesomeIcon icon="fa-solid fa-trash-can" style={{color: "#ffffff",}} /> Delete</button>
+                    <FontAwesomeIcon icon="fa-solid fa-trash-can" style={{ color: "#ffffff" }} /> Delete
+                  </button>
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="4" style={{ textAlign: "center", padding: "10px" }}>No inventory items found.</td>
+              <td colSpan="4" style={{ textAlign: "center", padding: "10px" }}>
+                No inventory items found.
+              </td>
             </tr>
           )}
         </tbody>
       </table>
-
-    {showProductModal && selectedProduct && (
-      <div className="modal-overlay">
-        <div className="modal">
-          <div className="product-details">
-            <h2>{selectedProduct.product_name}</h2>
-            <p><strong>Description:</strong> {selectedProduct.product_description || 'No description available.'}</p>
-            <p><strong>Price:</strong> ${selectedProduct.product_price}</p>
-            <p><strong>Shipment Month:</strong> {selectedProduct.product_shipment_month ? new Date(selectedProduct.product_shipment_month).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }) : 'N/A'}</p>
-            <p><strong>Created On:</strong> {selectedProduct.product_created ? new Date(selectedProduct.product_created).toLocaleDateString() : 'N/A'}</p>
-            <button onClick={() => setShowProductModal(false)} className="cancel-btn">Close</button>
+  
+      {/* === Product Info Modal === */}
+      {showProductModal && selectedProduct && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div className="product-details">
+              <h2>{selectedProduct.product_name}</h2>
+              <p><strong>Description:</strong> {selectedProduct.product_description || 'No description available.'}</p>
+              <p><strong>Price:</strong> ${selectedProduct.product_price}</p>
+              <p><strong>Shipment Month:</strong> {selectedProduct.product_shipment_month ? new Date(selectedProduct.product_shipment_month).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }) : 'N/A'}</p>
+              <p><strong>Created On:</strong> {selectedProduct.product_created ? new Date(selectedProduct.product_created).toLocaleDateString() : 'N/A'}</p>
+              <button onClick={() => setShowProductModal(false)} className="cancel-btn">Close</button>
+            </div>
           </div>
         </div>
-      </div>
-    )}
-
+      )}
     </div>
   );
 }
